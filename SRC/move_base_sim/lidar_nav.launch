@@ -1,0 +1,93 @@
+<launch>
+  <node name="arduino" pkg="ros_arduino_python" type="arduino_node.py" output="screen">
+    <rosparam file="../config/arduino.yaml" command="load" />
+  </node>
+
+  <node name="rosbridge_udp" pkg="rosbridge_server" type="rosbridge_udp" output="screen">
+    <param name="authenticate" value="false" />
+    <param name="port" value="9091"/>
+    <param name="interface" value=""/>
+    <param name="fragment_timeout" value="600"/>
+    <param name="delay_between_messages" value="0"/>
+    <param name="max_message_size" value="None"/>
+    <param name="topics_glob" value="[*]"/>
+    <param name="services_glob" value="[]"/>
+    <param name="params_glob" value="[]"/>
+  </node>
+
+  <node name="rosbridge_websocket" pkg="rosbridge_server" type="rosbridge_websocket" output="screen">
+    <param name="authenticate" value="false" />
+    <param name="port" value="9090"/>
+    <param name="address" value=""/>
+    <param name="retry_startup_delay" value="1"/>
+    <param name="fragment_timeout" value="600"/>
+    <param name="delay_between_messages" value="0"/>
+    <param name="max_message_size" value="None"/>
+    <param name="topics_glob" value="[*]"/>
+    <param name="services_glob" value="[]"/>
+    <param name="params_glob" value="[]"/>
+  </node>
+
+  <node name="rosapi" pkg="rosapi" type="rosapi_node">
+    <param name="topics_glob" value="[*]"/>
+    <param name="services_glob" value="[]"/>
+    <param name="params_glob" value="[]"/>
+  </node>
+
+  <node name="robot_pose_publisher" pkg="robot_pose_publisher" type="robot_pose_publisher">
+    <param name="is_stamped" value="true"/>
+  </node>
+
+  <node name="rplidarNode" pkg="rplidar_ros"  type="rplidarNode" output="screen">
+    <param name="serial_port"         type="string" value="/dev/rplidar"/>
+    <param name="serial_baudrate"     type="int"    value="115200"/>
+    <param name="frame_id"            type="string" value="laser"/>
+    <param name="inverted"            type="bool"   value="false"/>
+    <param name="angle_compensate"    type="bool"   value="true"/>
+  </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_frame_laser" args="0 0 0 0 0 0 /base_link /laser 30"/>
+
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <param name="map_update_interval" value="1.0"/>
+    <param name="maxUrange" value="6.0"/>
+    <param name="maxRange" value="6.0"/>
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.01"/>
+    <param name="iterations" value="5"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="1.0"/>
+    <param name="lskip" value="0"/>
+    <param name="srr" value="0.5"/>
+    <param name="srt" value="0.2"/>
+    <param name="str" value="0.3"/>
+    <param name="stt" value="0.2"/>
+    <param name="linearUpdate" value="0.01"/>
+    <param name="angularUpdate" value="0.01"/>
+    <param name="particles" value="15"/>
+    <param name="xmin" value="-20.0"/>
+    <param name="ymin" value="-20.0"/>
+    <param name="xmax" value="20.0"/>
+    <param name="ymax" value="20.0"/>
+    <param name="delta" value="0.05"/>
+    <param name="minimumScore" value="100"/>
+    <param name="temporalUpdate" value="3.0"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
+  </node>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="../config/move_base_params.yaml" command="load" />
+    <rosparam file="../config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="../config/local_costmap_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="../config/global_planner_params.yaml" command="load" ns="GlobalPlanner"/>
+    <rosparam file="../config/dwa_local_planner_params.yaml" command="load" ns="DWAPlannerROS"/>
+  </node>
+
+</launch>
+

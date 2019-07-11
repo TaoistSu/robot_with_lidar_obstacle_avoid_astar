@@ -1,0 +1,37 @@
+<launch>
+  <node name="arduino" pkg="ros_arduino_python" type="arduino_node.py" output="screen">
+    <rosparam file="../config/arduino.yaml" command="load" />
+  </node>
+
+  <node name="rosbridge_udp" pkg="rosbridge_server" type="rosbridge_udp" output="screen">
+    <param name="authenticate" value="false" />
+    <param name="port" value="9091"/>
+    <param name="interface" value=""/>
+    <param name="fragment_timeout" value="600"/>
+    <param name="delay_between_messages" value="0"/>
+    <param name="max_message_size" value="None"/>
+    <param name="topics_glob" value="[*]"/>
+    <param name="services_glob" value="[]"/>
+    <param name="params_glob" value="[]"/>
+  </node>
+
+  <node name="rosbridge_websocket" pkg="rosbridge_server" type="rosbridge_websocket" output="screen">
+    <param name="authenticate" value="false" />
+    <param name="port" value="9090"/>
+    <param name="address" value=""/>
+    <param name="retry_startup_delay" value="1"/>
+    <param name="fragment_timeout" value="600"/>
+    <param name="delay_between_messages" value="0"/>
+    <param name="max_message_size" value="None"/>
+    <param name="topics_glob" value="[*]"/>
+    <param name="services_glob" value="[]"/>
+    <param name="params_glob" value="[]"/>
+  </node>
+
+  <node name="rosapi" pkg="rosapi" type="rosapi_node">
+    <param name="topics_glob" value="[*]"/>
+    <param name="services_glob" value="[]"/>
+    <param name="params_glob" value="[]"/>
+  </node>
+</launch>
+

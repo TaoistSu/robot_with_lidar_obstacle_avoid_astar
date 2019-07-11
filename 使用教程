@@ -1,0 +1,32 @@
+B站的演示视频
+
+https://www.bilibili.com/video/av15949185?from=search&seid=3609217868527380773
+
+网盘下载源码
+
+链接: https://pan.baidu.com/s/1oc4zCGDWUHhtean5IqjrKw 密码: t5yc
+
+解压至home
+
+先编译包
+
+$ cd ~/AutolaborSimulator
+
+$ catkin_make
+
+再刷新环境
+
+$ source ~/AutolaborSimulator/devel/setup.bash 
+
+$ echo "source ~/AutolaborSimulator/devel/setup.bash" >> ~/.bashrc
+
+运行launch文件
+
+$ roslaunch simulation_launch move_base_simulation.launch
+
+即可看到Rviz模拟画面了。
+--------------------- 
+作者：大头军军 
+来源：CSDN 
+原文：https://blog.csdn.net/wuha3804/article/details/80818691 
+版权声明：本文为博主原创文章，转载请附上博文链接！
